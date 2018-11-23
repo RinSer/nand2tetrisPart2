@@ -1,22 +1,24 @@
+﻿import my_consts as const
+
 class Parser:
     COMMANDS = {
-            'add': 'C_ARITHMETIC',
-            'sub': 'C_ARITHMETIC',
-            'neg': 'C_ARITHMETIC',
-            'eq': 'C_ARITHMETIC',
-            'gt': 'C_ARITHMETIC',
-            'lt': 'C_ARITHMETIC',
-            'and': 'C_ARITHMETIC',
-            'or': 'C_ARITHMETIC',
-            'not': 'C_ARITHMETIC',
-            'push': 'C_PUSH',
-            'pop': 'C_POP',
-            'label': 'C_LABEL',
-            'goto': 'C_GOTO',
-            'if-goto': 'C_IF',
-            'function': 'C_FUNCTION',
-            'call': 'C_RETURN',
-            'return': 'C_CALL'
+            const.ADD: const.ARITHMETIC,
+            const.SUB: const.ARITHMETIC,
+            const.NEG: const.ARITHMETIC,
+            const.EQ: const.ARITHMETIC,
+            const.GT: const.ARITHMETIC,
+            const.LT: const.ARITHMETIC,
+            const.AND: const.ARITHMETIC,
+            const.OR: const.ARITHMETIC,
+            const.NOT: const.ARITHMETIC,
+            'push': const.PUSH,
+            'pop': const.POP,
+            'label': const.LABEL,
+            'goto': const.GOTO,
+            'if-goto': const.IF,
+            'function': const.FUNCTION,
+            'call': const.RETURN,
+            'return': const.CALL
         }
 
     def __init__(self, fileName):
@@ -33,6 +35,9 @@ class Parser:
     def commandType(self):
         return self.COMMANDS[self.line.split(' ')[0]]
 
+    def command(self):
+        return self.line.split(' ')[0].strip(' \t\n\r')
+
     def arg1(self):
         args = self.line.split(' ')
         if len(args) > 1:
@@ -47,14 +52,15 @@ class Parser:
         else:
             return ''
 
+    def vmCommand(self):
+        return self.line
+
     def findCommand(self):
         line = self.file.readline()
         if not line:
             self.line = line
+            self.file.close()
         else:
-            self.line = self.file.readline().strip(' \t\n\r')
+            self.line = line.strip(' \t\n\r')
             if not self.line or self.line[0] == '/' and self.line[1] == '/':
                 self.findCommand()
-            
-
-    
