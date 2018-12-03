@@ -9,13 +9,14 @@ def translate(file):
     if '.vm' in file:
         parser = Parser(file)
     else:
-        file = file if '/' == file[0] else '/' + file
-        if os.getcwd().split('/')[-1] != file.split('/')[-1]:
+        if os.getcwd().split('/')[-1] != file:
             os.chdir(file)
-        for fileName in glob.glob('*.asm'):
+        for fileName in glob.glob('*.vm'):
             if fileName != const.SYS:
+                writer.setFileName(fileName)
                 parser = Parser(fileName)
                 parse(parser, writer)
+        writer.setFileName(fileName)
         parser = Parser(const.SYS)
     parse(parser, writer)
     writer.close()
@@ -36,7 +37,7 @@ def parse(parser, codeWriter):
         if parser.commandType() == const.CALL:
             codeWriter.writeCall(parser.arg1(), parser.arg2(), parser.vmCommand())
         if parser.commandType() == const.RETURN:
-            codeWriter.writeCall(parser.vmCommand)
+            codeWriter.writeReturn(parser.vmCommand())
         if parser.commandType() == const.FUNCTION:
             codeWriter.writeFunction(parser.arg1(), parser.arg2(), parser.vmCommand())
         parser.advance()

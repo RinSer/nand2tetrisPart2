@@ -17,8 +17,8 @@ class Parser:
             'goto': const.GOTO,
             'if-goto': const.IF,
             'function': const.FUNCTION,
-            'call': const.RETURN,
-            'return': const.CALL
+            'call': const.CALL,
+            'return': const.RETURN
         }
 
     def __init__(self, fileName):

@@ -145,9 +145,12 @@ M=D
 M=M+1
 // if-goto LOOP_START  // If counter > 0, goto LOOP_START
 @SP
+M=M-1
+A=M
 D=M
 @LOOP_START
-D;JGT// push local 0
+D;JNE
+// push local 0
 @0
 D=A
 @LCL
