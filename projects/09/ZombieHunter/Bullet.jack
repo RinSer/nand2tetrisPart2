@@ -1,0 +1,112 @@
+/** Implements a Player */
+class Bullet {
+
+   field int location; // screen location of the Player's top-left corner
+   field int direction;
+   field boolean isOver; // flag
+   field Bullet previous;
+
+   /** Constructs a new Player at a given location (top-left corner) */
+   constructor Bullet new(int loc, int direct, Bullet pre) {
+      let isOver = false;
+      let location = loc;
+      let direction = direct;
+      let previous = pre;
+      do draw();
+      return this;
+   }
+
+   method Bullet getPrevious() {
+      return previous;
+   }
+
+   method int getDirection() {
+      return direction;
+   }
+
+   method int getLocation() {
+      return location;
+   }
+
+   /** Disposes this Player */
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+
+   method boolean isOver() {
+      return isOver;
+   }
+
+   method void moveTo() {
+      if (direction = 1) { do moveUp(); }
+      if (direction = 2) { do moveDown(); }
+      if (direction = 3) { do moveLeft(); }
+      if (direction = 4) { do moveRight(); }
+      return;
+   }
+
+   method void moveUp() {
+      if (location > 0) {
+         do erase();
+         let location = location - 32;
+         do draw();
+      } else {
+         do erase();
+         let isOver = true;
+      }
+      return;
+   }
+
+   method void moveDown() {
+      if (location < 7680) {
+         do erase();
+         let location = location + 32;
+         do draw();
+      } else {
+         do erase();
+         let isOver = true;
+      }
+      return;
+   }
+
+   method void moveLeft() {
+      if (~(((location / 32) * 32) = location)) {
+         do erase();
+         let location = location - 1;
+         do draw();
+      } else {
+         do erase();
+         let isOver = true;
+      }
+      return;
+   }
+
+   method void moveRight() {
+      if (~((((location + 1) / 32) * 32) = (location + 1))) {
+         do erase();
+         let location = location + 1;
+         do draw();
+      } else {
+         do erase();
+         let isOver = true;
+      }
+      return;
+   }
+
+   method void draw() {
+      var int memAddress;
+      let memAddress = 16384+location;
+      do Memory.poke(memAddress+224, 384);
+      do Memory.poke(memAddress+256, 384);
+      return;
+   }
+
+   method void erase() {
+      var int memAddress;
+      let memAddress = 16384+location;
+      do Memory.poke(memAddress+224, 0);
+      do Memory.poke(memAddress+256, 0);
+      return;
+   }
+}

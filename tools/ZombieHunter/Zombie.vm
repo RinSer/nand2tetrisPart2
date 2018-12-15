@@ -1,0 +1,378 @@
+function Zombie.new 0
+push constant 1
+call Memory.alloc 1
+pop pointer 0
+push pointer 0
+push argument 0
+push argument 1
+call Zombie.setLocation 3
+pop temp 0
+push pointer 0
+return
+function Zombie.getLocation 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Zombie.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function Zombie.setLocation 0
+push argument 0
+pop pointer 0
+push argument 1
+push constant 32
+lt
+push argument 1
+and
+push constant 1
+neg
+gt
+push argument 2
+and
+push constant 16
+lt
+push argument 2
+and
+push constant 1
+neg
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 16
+push argument 1
+call Math.multiply 2
+push constant 32
+add
+push argument 2
+call Math.multiply 2
+pop this 0
+push pointer 0
+call Zombie.erase 1
+pop temp 0
+push pointer 0
+call Zombie.draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Zombie.moveUp 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 0
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Zombie.erase 1
+pop temp 0
+push this 0
+push constant 32
+sub
+pop this 0
+push pointer 0
+call Zombie.draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Zombie.moveDown 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 7680
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Zombie.erase 1
+pop temp 0
+push this 0
+push constant 32
+add
+pop this 0
+push pointer 0
+call Zombie.draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Zombie.moveLeft 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 32
+call Math.divide 2
+push constant 32
+call Math.multiply 2
+push this 0
+eq
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Zombie.erase 1
+pop temp 0
+push this 0
+push constant 1
+sub
+pop this 0
+push pointer 0
+call Zombie.draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Zombie.moveRight 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 1
+add
+push constant 32
+call Math.divide 2
+push constant 32
+call Math.multiply 2
+push this 0
+push constant 1
+add
+eq
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Zombie.erase 1
+pop temp 0
+push this 0
+push constant 1
+add
+pop this 0
+push pointer 0
+call Zombie.draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Zombie.draw 1
+push argument 0
+pop pointer 0
+push constant 16384
+push this 0
+add
+pop local 0
+push local 0
+push constant 0
+add
+push constant 384
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 32
+add
+push constant 32191
+neg
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 64
+add
+push constant 24966
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 96
+add
+push constant 26471
+neg
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 128
+add
+push constant 1888
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 160
+add
+push constant 704
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 192
+add
+push constant 832
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 224
+add
+push constant 704
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 256
+add
+push constant 384
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 288
+add
+push constant 576
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 320
+add
+push constant 1632
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 352
+add
+push constant 1056
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 384
+add
+push constant 576
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 416
+add
+push constant 1056
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 448
+add
+push constant 2640
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 480
+add
+push constant 3696
+call Memory.poke 2
+pop temp 0
+push constant 0
+return
+function Zombie.erase 1
+push argument 0
+pop pointer 0
+push constant 16384
+push this 0
+add
+pop local 0
+push local 0
+push constant 0
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 32
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 64
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 96
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 128
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 160
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 192
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 224
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 256
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 288
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 320
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 352
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 384
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 416
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 448
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 480
+add
+push constant 0
+call Memory.poke 2
+pop temp 0
+push constant 0
+return
