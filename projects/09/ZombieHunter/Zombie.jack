@@ -1,16 +1,22 @@
 /** Implements a Zombie */
 class Zombie {
 
+   field boolean haveCaught; // flag
    field int location; // screen location of the zombie's top-left corner
 
    /** Constructs a new zombie at a given location (top-left corner) */
    constructor Zombie new(int x, int y) {
+      let haveCaught = false;
       do setLocation(x, y);
       return this;
    }
 
    method int getLocation() {
       return location;
+   }
+
+   method boolean isSuccess() {
+      return haveCaught;
    }
 
    /** Disposes this zombie */
@@ -22,9 +28,36 @@ class Zombie {
    method void setLocation(int x, int y) {
       if (x < 32 & x > -1 & y < 16 & y > -1) {
          let location = 16*x + 32*y;
-         do erase();
          do draw();
       }      
+      return;
+   }
+
+   method void moveTo(int target) {
+      var int targetX;
+      var int locX;
+      do erase();
+      if (target = location) {
+         let haveCaught = true;
+      }
+      if (((target - location) / 32) * 32 = (target - location)) {
+         if (target < location) {
+            do moveUp();
+         }
+         if (target > location) {
+            do moveDown();
+         }
+      } else {
+         let targetX = target - ((target / 32) * 32);
+         let locX = location - ((location / 32) * 32);
+         if (targetX > locX) {
+            do moveRight();
+         }
+         if (targetX < locX) {
+            do moveLeft();
+         }
+      }
+      do draw();
       return;
    }
 

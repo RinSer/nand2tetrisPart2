@@ -4,16 +4,21 @@
  */
 
 class ZombieGame {
+   field int zNumber;
    field Player player;
    field Bullet bullet;
+   field Array zombies;
    field int direction;
    field int bulletDirection;
    field boolean isShooting;
+   field boolean exit;
 
    /** Constructs a new Zombie Game. */
    constructor ZombieGame new() {
       let isShooting = false;
-      let player = Player.new(0, 0);
+      let zNumber = 3;
+      let player = Player.new(25, 7);
+      let zombies = Array.new(zNumber);
       do player.erase();
       do player.draw();
       return this;
@@ -53,6 +58,8 @@ class ZombieGame {
       var boolean stop;
       var Bullet current;
       var Bullet dead;
+      var Zombie cZombie;
+      var int idx;
       // shooting
       if (isShooting) {
          let current = bullet;
@@ -70,6 +77,18 @@ class ZombieGame {
                      let current = current.getPrevious();
                   } else {
                      do current.moveTo();
+                     let idx = 0;
+                     while (idx < zNumber) {
+                        let cZombie = zombies[idx];
+                        if (~(cZombie = null)) {
+                           if (cZombie.getLocation() = current.getLocation()) {
+                              do cZombie.erase();
+                              do cZombie.dispose();
+                              let zombies[idx] = null;
+                           }
+                        }
+                        let idx = idx + 1;
+                     }
                      do Sys.wait(5);
                      let current = current.getPrevious();
                   }
@@ -80,18 +99,50 @@ class ZombieGame {
       return;
    }
 
+   method void moveZombies() {
+      var int idx;
+      var Zombie current;
+      let idx = 0;
+      while (idx < zNumber) {
+         if (~(zombies[idx] = null)) {
+            let current = zombies[idx];
+            do current.moveTo(player.getLocation());
+            if (current.isSuccess()) {
+               do Output.printString("You got caught! Game over.");
+               let exit = true;
+            }
+            do Sys.wait(50);
+         }
+         let idx = 1 + idx;
+      }
+      return;
+   }
+
+   method void addZombie() {
+      var int idx;
+      let idx = 0;
+      while (idx < zNumber) {
+         if (zombies[idx] = null) {
+            let zombies[idx] = Zombie.new(0, 0);
+            return;
+         }
+         let idx = 1 + idx;
+      }
+      return;
+   }
+
    /** Runs the game: handles the user's inputs and moves the zombie accordingly */
    method void run() {
       var char key;  // the key currently pressed by the user
-      var boolean exit;
       let exit = false;
       
       while (~exit) {
          // waits for a key to be pressed
-         while (key = 0) {
+         while (~exit & (key = 0)) {
             let key = Keyboard.keyPressed();
             do player.draw();
             do processShooting();
+            do moveZombies();
          }
          if (key = 81)  { let exit = true; }     // q key
          if (key = 131) { let direction = 1; }   // up arrow
@@ -100,13 +151,15 @@ class ZombieGame {
          if (key = 132) { let direction = 4; }   // right arrow
          if (key = 32) { do shoot(); } // space
 
+         do addZombie();
          // waits for the key to be released
-         while (~(key = 0)) {
+         while (~exit & ~(key = 0)) {
             let key = Keyboard.keyPressed();
             if ((key > 129) & (key < 134)) {
                do movePlayer();
             }
             do processShooting();
+            do moveZombies();
          }
      } // while
      return;
