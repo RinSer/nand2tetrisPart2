@@ -1,6 +1,17 @@
 /**
- * Implements the Zombie game.
- * 
+ * Zombie hunter game in Jack language.
+ * Simple 8 bit game. You are a survived hunter 
+ * and each time you move with arrow buttons
+ * zombies start chasing you. You can shoot them
+ * with a rifle by pushing space button. Player 
+ * always shoots in the last direction where he moved,
+ * but you can not shoot multiple times in the same 
+ * direction as you need to reload your rifle by moving
+ * first to any other direction and than back to the
+ * desired for shot. Each time you kill a zombie the 
+ * next to come becomes more fast and fierce.
+ * Try to survive as long as possible!
+ * Authored by RinSer
  */
 
 class ZombieGame {
@@ -43,6 +54,7 @@ class ZombieGame {
       return;
    }
 
+   /** creates zombie in position specified by array index */
    method Zombie zombieByIndex(int index) {
       if (index = 0) {
          return Zombie.new(0, 0);
@@ -59,6 +71,7 @@ class ZombieGame {
       return null;
    }
 
+   /** implements each shot */
    method void shoot() {
       var int location;
       let location = player.getLocation();
@@ -76,6 +89,7 @@ class ZombieGame {
       return;
    }
 
+   /** bullets fly */
    method void processShooting() {
       var boolean stop;
       var Bullet current;
@@ -122,6 +136,7 @@ class ZombieGame {
       return;
    }
 
+   /** if zombie is shot */
    method void killZombie(Zombie zombie, int idx) {
       do zombie.erase();
       do zombie.dispose();
@@ -129,6 +144,7 @@ class ZombieGame {
       return;
    }
 
+   /** let zombies move to the player */
    method void moveZombies() {
       var int idx;
       var Zombie current;
@@ -148,6 +164,7 @@ class ZombieGame {
       return;
    }
 
+   /** creates zombies */
    method void addZombie() {
       var int idx;
       let idx = 0;

@@ -1,3 +1,6 @@
+/** Part of Zombie Hunter game in Jack language
+  * Author: RinSer
+  */
 /** Implements a Player */
 class Player {
 
@@ -9,6 +12,7 @@ class Player {
       return this;
    }
 
+   /** gets player location */
    method int getLocation() {
       return location;
    }

@@ -1,3 +1,6 @@
+/** Part of Zombie Hunter game in Jack language
+  * Author: RinSer
+  */
 /** Implements a Zombie */
 class Zombie {
 
@@ -11,10 +14,12 @@ class Zombie {
       return this;
    }
 
+   /** gets zombie location */
    method int getLocation() {
       return location;
    }
 
+   /** zombie has caught player */
    method boolean isSuccess() {
       return haveCaught;
    }
@@ -25,6 +30,7 @@ class Zombie {
       return;
    }
 
+   /** sets zombie location by cartesian coordinates */
    method void setLocation(int x, int y) {
       if (x < 32 & x > -1 & y < 240 & y > -1) {
          let location = x + (32*y);
@@ -33,6 +39,7 @@ class Zombie {
       return;
    }
 
+   /** moves zombie to player */
    method void moveTo(int target) {
       var int targetX;
       var int locX;

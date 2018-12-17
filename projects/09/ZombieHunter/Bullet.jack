@@ -1,4 +1,7 @@
-/** Implements a Player */
+/** Part of Zombie Hunter game in Jack language
+  * Author: RinSer
+  */
+/** Implements all Bullets as recursive list */
 class Bullet {
 
    field int location; // screen location of the Player's top-left corner
@@ -6,7 +9,7 @@ class Bullet {
    field boolean isOver; // flag
    field Bullet previous;
 
-   /** Constructs a new Player at a given location (top-left corner) */
+   /** Constructs a new Bullet at a given memory location with set direction */
    constructor Bullet new(int loc, int direct, Bullet pre) {
       let isOver = false;
       let location = loc;
@@ -16,18 +19,22 @@ class Bullet {
       return this;
    }
 
+   /** gets previous bullet */
    method Bullet getPrevious() {
       return previous;
    }
 
+   /** gets bullet direction */
    method int getDirection() {
       return direction;
    }
 
+   /** gets bullet location */
    method int getLocation() {
       return location;
    }
 
+   /** if zombie is hit */
    method boolean aimed(int target) {
       var int diff;
       let diff = target - location;
@@ -47,10 +54,12 @@ class Bullet {
       return;
    }
 
+   /** if bullet has finished fly */
    method boolean isOver() {
       return isOver;
    }
 
+   /** set bullet finished */
    method void setOver() {
       let isOver = true;
       do erase();
