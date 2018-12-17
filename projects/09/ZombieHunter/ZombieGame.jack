@@ -12,12 +12,14 @@ class ZombieGame {
    field int bulletDirection;
    field boolean isShooting;
    field boolean exit;
+   field int killed;
 
    /** Constructs a new Zombie Game. */
    constructor ZombieGame new() {
       let isShooting = false;
-      let zNumber = 3;
-      let player = Player.new(25, 7);
+      let killed = 50;
+      let zNumber = 2;
+      let player = Player.new(15, 122);
       let zombies = Array.new(zNumber);
       do player.erase();
       do player.draw();
@@ -33,18 +35,38 @@ class ZombieGame {
 
    /** Moves the player in the current direction. */
    method void movePlayer() {
-      if (direction = 1) { do player.moveUp(); do Sys.wait(5); }
-      if (direction = 2) { do player.moveDown(); do Sys.wait(5); }
-      if (direction = 3) { do player.moveLeft(); do Sys.wait(100); }
-      if (direction = 4) { do player.moveRight(); do Sys.wait(100); }
+      if (direction = 1) { do player.moveUp(); }
+      if (direction = 2) { do player.moveDown(); }
+      if (direction = 3) { do player.moveLeft(); }
+      if (direction = 4) { do player.moveRight(); }
+      do Sys.wait(5);
       return;
+   }
+
+   method Zombie zombieByIndex(int index) {
+      if (index = 0) {
+         return Zombie.new(0, 0);
+      }
+      if (index = 2) {
+         return Zombie.new(30, 0);
+      }
+      if (index = 1) {
+         return Zombie.new(30, 240);
+      }
+      if (index = 3) {
+         return Zombie.new(0, 240);
+      }
+      return null;
    }
 
    method void shoot() {
       var int location;
       let location = player.getLocation();
       if (isShooting) {
-         if (~(direction = bullet.getDirection())) {
+         if (bullet = null) {
+            let bullet = Bullet.new(location, direction, null);
+         }
+         if ((~(bullet = null)) & (~(direction = bullet.getDirection()))) {
             let bullet = Bullet.new(location, direction, bullet);
          }
       } else {
@@ -81,21 +103,29 @@ class ZombieGame {
                      while (idx < zNumber) {
                         let cZombie = zombies[idx];
                         if (~(cZombie = null)) {
-                           if (cZombie.getLocation() = current.getLocation()) {
-                              do cZombie.erase();
-                              do cZombie.dispose();
-                              let zombies[idx] = null;
+                           if (current.aimed(cZombie.getLocation())) {
+                              do killZombie(cZombie, idx);
+                              do current.setOver();
+                              if (killed > 0) {
+                                 let killed = killed - 1;
+                              }
                            }
                         }
                         let idx = idx + 1;
                      }
-                     do Sys.wait(5);
                      let current = current.getPrevious();
                   }
                }    
             }
          }
       }
+      return;
+   }
+
+   method void killZombie(Zombie zombie, int idx) {
+      do zombie.erase();
+      do zombie.dispose();
+      let zombies[idx] = null;
       return;
    }
 
@@ -111,7 +141,7 @@ class ZombieGame {
                do Output.printString("You got caught! Game over.");
                let exit = true;
             }
-            do Sys.wait(50);
+            do Sys.wait(killed);
          }
          let idx = 1 + idx;
       }
@@ -123,8 +153,7 @@ class ZombieGame {
       let idx = 0;
       while (idx < zNumber) {
          if (zombies[idx] = null) {
-            let zombies[idx] = Zombie.new(0, 0);
-            return;
+            let zombies[idx] = zombieByIndex(idx);
          }
          let idx = 1 + idx;
       }

@@ -20,8 +20,8 @@ class Player {
    }
 
    method void setLocation(int x, int y) {
-      if (x < 32 & x > -1 & y < 16 & y > -1) {
-         let location = 16*x + 32*y;
+      if (x < 32 & x > -1 & y < 240 & y > -1) {
+         let location = x + (32*y);
          do erase();
          do draw();
       }      
@@ -29,18 +29,18 @@ class Player {
    }
 
    method void moveUp() {
-      if (location > 0) {
+      if (location > 128) {
          do erase();
-         let location = location - 32;
+         let location = location - 128;
          do draw();
       }
       return;
    }
 
    method void moveDown() {
-      if (location < 7680) {
+      if (location < 7568) { // 7680
          do erase();
-         let location = location + 32;
+         let location = location + 128;
          do draw();
       }
       return;

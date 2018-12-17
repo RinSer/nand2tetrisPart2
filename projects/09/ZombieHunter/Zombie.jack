@@ -26,8 +26,8 @@ class Zombie {
    }
 
    method void setLocation(int x, int y) {
-      if (x < 32 & x > -1 & y < 16 & y > -1) {
-         let location = 16*x + 32*y;
+      if (x < 32 & x > -1 & y < 240 & y > -1) {
+         let location = x + (32*y);
          do draw();
       }      
       return;
@@ -55,6 +55,14 @@ class Zombie {
          }
          if (targetX < locX) {
             do moveLeft();
+         }
+         if (((location - target) > 32) | ((target - location) > 32)) {
+            if (target < location) {
+               do moveUp();
+            }
+            if (target > location) {
+               do moveDown();
+            }
          }
       }
       do draw();

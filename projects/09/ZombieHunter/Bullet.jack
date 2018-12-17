@@ -28,6 +28,19 @@ class Bullet {
       return location;
    }
 
+   method boolean aimed(int target) {
+      var int diff;
+      let diff = target - location;
+      if (diff = 0) {
+         return true;
+      }
+      // horizontal align
+      if ((((diff / 32) * 32) = diff) & ((diff > -257) & (diff < 257))) {
+         return true;
+      }
+      return false;
+   }
+
    /** Disposes this Player */
    method void dispose() {
       do Memory.deAlloc(this);
@@ -36,6 +49,12 @@ class Bullet {
 
    method boolean isOver() {
       return isOver;
+   }
+
+   method void setOver() {
+      let isOver = true;
+      do erase();
+      return;
    }
 
    method void moveTo() {
@@ -47,9 +66,9 @@ class Bullet {
    }
 
    method void moveUp() {
-      if (location > 0) {
+      if (location > 256) {
          do erase();
-         let location = location - 32;
+         let location = location - 256;
          do draw();
       } else {
          do erase();
@@ -59,9 +78,9 @@ class Bullet {
    }
 
    method void moveDown() {
-      if (location < 7680) {
+      if (location < 7440) {
          do erase();
-         let location = location + 32;
+         let location = location + 256;
          do draw();
       } else {
          do erase();
