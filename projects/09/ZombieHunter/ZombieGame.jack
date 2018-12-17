@@ -7,7 +7,7 @@
  * always shoots in the last direction where he moved,
  * but you cannot shoot multiple times in the same 
  * direction as you need to reload your rifle by moving
- * first to any other direction and than back to the
+ * first to any other direction and then back to the
  * desired for shot. Each time you kill a zombie the 
  * next to come becomes more fast and fierce.
  * Try to survive as long as possible!
