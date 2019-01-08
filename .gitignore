@@ -1,2 +1,3 @@
 *.zip
 *.dat
+__pycache__/
