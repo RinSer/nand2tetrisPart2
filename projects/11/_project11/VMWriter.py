@@ -2,11 +2,28 @@ class VMWriter:
     def __init__(self, fileName):
         self.out = open(fileName + '.vm', 'w')
 
+    def mapSegment(self, segment):
+        return {
+            'constant' : 'constant',
+            'static' : 'static',
+            'field' : 'this',
+            'arg' : 'argument',
+            'var' : 'local',
+            'temp' : 'temp'
+        }.get(segment)
+
+    def mapIndex(self, index):
+        if index in ['null', 'true', 'false']:
+            return 0
+        return index
+
     def writePush(self, segment, index):
-        self.out.write('push ' + segment + ' ' + str(index) + '\n')
+        self.out.write('push ' + str(self.mapSegment(segment)) + ' ' + str(self.mapIndex(index)) + '\n')
+        if index == 'true':
+            self.out.write('not\n')
 
     def writePop(self, segment, index):
-        self.out.write('pop ' + segment + ' ' + str(index) + '\n')
+        self.out.write('pop ' + str(self.mapSegment(segment)) + ' ' + str(self.mapIndex(index)) + '\n')
 
     def writeArithmetic(self, command, unary = False):
         if unary:
