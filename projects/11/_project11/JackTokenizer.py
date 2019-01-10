@@ -19,6 +19,21 @@ class JackTokenizer:
     def hasMoreTokens(self):
         return not not self.token
 
+    def nextToken(self):
+        if len(self.content) > 0:
+            idx = 0
+            token = self.content[idx]
+            if token == ' ':
+                idx += 1
+                if idx < len(self.content):
+                    token = self.content[idx]
+            if token != ' ':
+                while idx != (len(self.content) - 1) and token not in const.SYMBOL and token not in const.KEYWORD and self.content[idx + 1] not in const.SYMBOL and (self.content[idx + 1] != ' ' or token[0] == '"'):
+                    idx += 1
+                    token += self.content[idx]
+                return token
+        return None
+
     def advance(self):
         if len(self.content) > 0:
             idx = 0
