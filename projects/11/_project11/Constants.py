@@ -14,6 +14,8 @@ UOP = ['-', '~']
 OP = [
     '+', '-', '*', '/', '&', '|', '<', '>', '=', '&amp;', '&lt;', '&gt;'
 ]
+# Kinds of subroutines
+SUBS = ['constructor', 'function', 'method']
 # Kinds of variables
 KINDS = {
     'class': [ 'field', 'static' ],

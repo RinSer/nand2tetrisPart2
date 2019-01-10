@@ -20,9 +20,10 @@ class CompilationEngine:
         while self.tokenizer.hasMoreTokens():
             if self.tokenizer.getToken() == 'static' or self.tokenizer.getToken() == 'field':
                 self.compileClassVarDec()
-            elif self.tokenizer.getToken() in ['constructor', 'function', 'method']:
+            elif self.tokenizer.getToken() in const.SUBS:
                 self.compileSubroutine()
-            self.tokenizer.advance()
+            if not self.tokenizer.getToken() in const.SUBS:
+                self.tokenizer.advance()
         self.writer.close()
 
 
@@ -43,7 +44,7 @@ class CompilationEngine:
         while self.tokenizer.getToken() != '{':
             if self.tokenizer.getToken() == '(':
                 self.compileParameterList()
-            elif self.tokenizer.getToken() in ['constructor', 'method', 'function']:
+            elif self.tokenizer.getToken() in const.SUBS:
                 getType = True
             elif getType:
                 getName = True
@@ -60,7 +61,8 @@ class CompilationEngine:
         self.writer.writeFunction(self.className + '.' + functionName, numLocals)
         self.resetLabelCounters()
         self.compileStatements()
-        self.tokenizer.advance() # }
+        if self.tokenizer.getToken() == '}':
+            self.tokenizer.advance() # }
 
 
     def compileParameterList(self):
@@ -111,7 +113,6 @@ class CompilationEngine:
             self.tokenizer.advance() # ]
         self.tokenizer.advance() # =
         self.compileExpression() # expression
-        self.tokenizer.advance() # ;
         if not self.symbolTable.kindOf(assignee):
             raise Exception('Undeclared identifier assignment ' + assignee)
         else:
@@ -144,8 +145,6 @@ class CompilationEngine:
         self.writer.writeLabel(firstLabel)
         self.tokenizer.advance() # {
         self.compileStatements() # statements
-        if self.tokenizer.getToken() == ';':
-            self.tokenizer.advance() # ;
         self.tokenizer.advance() # }
         if self.tokenizer.getToken() == 'else':
             self.writer.writeGoto(endLabel)
@@ -220,6 +219,8 @@ class CompilationEngine:
             expLen += 1
         if not not op:
             self.writer.writeArithmetic(op)
+        if self.tokenizer.getToken() == ';':
+            self.tokenizer.advance() # ;
 
 
     def compileTerm(self):
