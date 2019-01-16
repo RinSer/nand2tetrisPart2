@@ -9,12 +9,31 @@
  */
 class Math {
 
+    static Array twoToThe;
+
     /** Initializes the library. */
     function void init() {
+        var int value, idx;
+        let value = 2;
+        let idx = 1;
+        let twoToThe = Array.new(16);
+        let twoToThe[0] = 1;
+        while (idx < 16) {
+            let twoToThe[idx] = value;
+            let value = value + value;
+            let idx = idx + 1;
+        }
+        return;
     }
 
     /** Returns the absolute value of x. */
     function int abs(int x) {
+        if (x < 0) {
+            return -x;
+        } 
+        else {
+            return x;
+        }
     }
 
     /** Returns the product of x and y. 
@@ -23,6 +42,18 @@ class Math {
      *  the Jack expressions x*y and multiply(x,y) return the same value.
      */
     function int multiply(int x, int y) {
+        var int result, shiftedX, idx;
+        let result = 0;
+        let shiftedX = x;
+        let idx = 0;
+        while (idx < 16) {
+            if (Math.bit(y, idx)) {
+                let result = result + shiftedX;
+            }
+            let shiftedX = shiftedX + shiftedX;
+            let idx = idx + 1;
+        }
+        return result;
     }
 
     /** Returns the integer part of x/y.
@@ -31,17 +62,61 @@ class Math {
      *  the Jack expressions x/y and divide(x,y) return the same value.
      */
     function int divide(int x, int y) {
+        var int quotient, mult, absX, result;
+        let absX = Math.abs(x);
+        if ((y > absX) | (y < 0)) {
+            return 0;
+        }
+        let quotient = Math.divide(absX, (y + y));
+        let mult = quotient * y;
+        let result = quotient + quotient;
+        if (~((absX - (mult + mult)) < y)) {
+            let result = result + 1;
+        }
+        if (x < 0) {
+            return -result;
+        }
+        return result;
     }
 
     /** Returns the integer part of the square root of x. */
     function int sqrt(int x) {
+        var int result, j, k, m;
+        let result = 0;
+        let j = 7;
+        while (~(j < 0)) {
+            let k = result + twoToThe[j];
+            let m = Math.multiply(k, k);
+            if (~(m < 0) & ((m < x) | (m = x))) {
+                let result = k;
+            }
+            let j = j - 1;
+        }
+        return result;
     }
 
     /** Returns the greater number. */
     function int max(int a, int b) {
+        if (a > b) {
+            return a;
+        } 
+        else {
+            return b;
+        }
     }
 
     /** Returns the smaller number. */
     function int min(int a, int b) {
+        if (a < b) {
+            return a;
+        } 
+        else {
+            return b;
+        }
+    }
+
+    /** Returns i-th bit of int */
+    function boolean bit(int x, int i) {
+        return x & twoToThe[i];
     }
 }
