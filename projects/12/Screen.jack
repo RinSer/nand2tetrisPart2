@@ -73,7 +73,7 @@ class Screen {
                 }
                 else
                 {
-                    let value = value & (-(end - twoToThe[bit]));
+                    let value = value & (-(twoToThe[bit] + 1));
                 }
             }
             do Memory.poke(start + address, value);
@@ -92,6 +92,12 @@ class Screen {
 
         if (x1 = x2) // vertical line
         {
+            if (y1 > y2)
+            {
+                let dy = y1;
+                let y1 = y2;
+                let y2 = dy;
+            }
             while (y1 < (y2 + 1))
             {
                 do Screen.drawPixel(x1, y1);
@@ -102,6 +108,12 @@ class Screen {
 
         if (y1 = y2) // horizontal line
         {
+            if (x1 > x2)
+            {
+                let dx = x1;
+                let x1 = x2;
+                let x2 = dx;
+            }
             while (x1 < (x2 + 1))
             {
                 do Screen.drawPixel(x1, y1);
@@ -111,13 +123,36 @@ class Screen {
         }
 
         let dx = x2 - x1;
+        if (dx < 0)
+        {
+            let dx = -dx;
+        }
         let dy = y2 - y1;
+        if (dy < 0)
+        {
+            let dy = -dy;
+        }
         let a = 0;
         let b = 0;
         let adyMinusbdx = 0;
-        while ((a < (dx + 1)) | (b < (dy + 1)))
+        while ((a < (dx + 1)) & (b < (dy + 1)))
         {
-            do Screen.drawPixel(x1 + a, y1 + b);
+            if ((x1 < x2) & (y1 < y2))
+            {
+                do Screen.drawPixel(x1 + a, y1 + b);
+            }
+            if ((x1 > x2) & (y1 < y2))
+            {
+                do Screen.drawPixel(x1 - a, y1 + b);
+            }
+            if ((x1 < x2) & (y1 > y2))
+            {
+                do Screen.drawPixel(x1 + a, y1 - b);
+            }
+            if ((x1 > x2) & (y1 > y2))
+            {
+                do Screen.drawPixel(x1 - a, y1 - b);
+            }
             if (adyMinusbdx < 0)
             {
                 let a = a + 1;
