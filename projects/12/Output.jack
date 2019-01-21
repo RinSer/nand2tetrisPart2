@@ -18,9 +18,13 @@ class Output {
 
     // Character map for displaying characters
     static Array charMaps; 
+    static int cursorRow, cursorCol;
 
     /** Initializes the screen, and locates the cursor at the screen's top-left. */
     function void init() {
+        do Output.initMap();
+        let cursorRow = 0;
+        let cursorCol = 0;
     }
 
     // Initializes the character map array
@@ -176,11 +180,32 @@ class Output {
     /** Moves the cursor to the j-th column of the i-th row,
      *  and erases the character displayed there. */
     function void moveCursor(int i, int j) {
+        if ((i < 0) | (i > 22))
+        {
+            let i = 0;
+        }
+        if ((j < 0) | (j > 63))
+        {
+            let j = 0;
+        }
+        let cursorRow = i;
+        let cursorCol = j;
+        Screen.setColor(true);
+        Screen.drawRectangle(8 * j, 11 * i, (8 * j) + 7, (11 * i) + 10);
     }
 
     /** Displays the given character at the cursor location,
      *  and advances the cursor one column forward. */
     function void printChar(char c) {
+        var Array cMap;
+        var int x, y;
+        let x = 8 * cursorCol;
+        let y = 11 * cursorRow;
+        let cMap = Output.getMap(c);
+        Screen.setColor(false);
+        Screen.drawRectangle(x, y, x + 7, y + 10);
+        Screen.setColor(true);
+        
     }
 
     /** displays the given string starting at the cursor location,
