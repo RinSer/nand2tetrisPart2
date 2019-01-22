@@ -25,6 +25,7 @@ class Output {
         do Output.initMap();
         let cursorRow = 0;
         let cursorCol = 0;
+        return;
     }
 
     // Initializes the character map array
@@ -75,7 +76,7 @@ class Output {
         do Output.create(64,30,51,51,59,59,59,27,3,30,0,0);  // @
         do Output.create(63,30,51,51,24,12,12,0,12,12,0,0);  // ?
 
-        do Output.create(65,0,0,0,0,0,0,0,0,0,0,0);          // A ** TO BE FILLED **
+        do Output.create(65,12,30,51,51,63,51,51,51,51,0,0); // A ** TO BE FILLED **
         do Output.create(66,31,51,51,51,31,51,51,51,31,0,0); // B
         do Output.create(67,28,54,35,3,3,3,35,54,28,0,0);    // C
         do Output.create(68,15,27,51,51,51,51,51,27,15,0,0); // D
@@ -180,49 +181,151 @@ class Output {
     /** Moves the cursor to the j-th column of the i-th row,
      *  and erases the character displayed there. */
     function void moveCursor(int i, int j) {
+        var int row, col;
+        // clear previous
+        let row = 11 * cursorRow;
+        let col = 8 * cursorCol;
+        do Screen.setColor(false);
+        do Screen.drawRectangle(col, row, col + 7, row + 10);
+        // draw new
+        if (j < 0)
+        {
+            let j = 0;
+        }
+        if (j > 63)
+        {
+            let i = i + 1;
+            let j = 0;
+        }
         if ((i < 0) | (i > 22))
         {
             let i = 0;
         }
-        if ((j < 0) | (j > 63))
-        {
-            let j = 0;
-        }
         let cursorRow = i;
         let cursorCol = j;
-        Screen.setColor(true);
-        Screen.drawRectangle(8 * j, 11 * i, (8 * j) + 7, (11 * i) + 10);
+        let row = 11 * i;
+        let col = 8 * j;
+        do Screen.setColor(true);
+        do Screen.drawRectangle(col, row, col + 7, row + 10);
+        return;
     }
 
     /** Displays the given character at the cursor location,
      *  and advances the cursor one column forward. */
     function void printChar(char c) {
         var Array cMap;
-        var int x, y;
+        var int x, y, address, idx, value;
+        var boolean evenCol;
         let x = 8 * cursorCol;
         let y = 11 * cursorRow;
+        let evenCol = (cursorCol - (2 * (cursorCol / 2)) = 0);
         let cMap = Output.getMap(c);
-        Screen.setColor(false);
-        Screen.drawRectangle(x, y, x + 7, y + 10);
-        Screen.setColor(true);
-        
+        do Output.moveCursor(cursorRow, cursorCol + 1);
+        let idx = 0;
+        while (idx < 11)
+        {
+            let address = (32 * (y + idx)) + (x / 16);
+            let value = Memory.peek(16384 + address);
+            if (evenCol)
+            {
+                let value = value | (cMap[idx] * 1);
+            }
+            else
+            {
+                let value = value | (cMap[idx] * 256);
+            }
+            do Memory.poke(16384 + address, value);
+            let idx = idx + 1;
+        }
+        return;
     }
 
     /** displays the given string starting at the cursor location,
      *  and advances the cursor appropriately. */
     function void printString(String s) {
+        var int idx;
+        let idx = 0;
+        while (idx < s.length())
+        {
+            do Output.printChar(s.charAt(idx));
+            let idx = idx + 1;
+        }
+        return;
+    }
+
+    function int findDecimalIdent(int length) {
+        if (length < 2) 
+        {
+            return 10;
+        }
+        else
+        {
+            return 10 * Output.findDecimalIdent(length - 1);
+        }
     }
 
     /** Displays the given integer starting at the cursor location,
      *  and advances the cursor appropriately. */
     function void printInt(int i) {
+        var int length, absI, dec, current;
+        var String integer;
+        let absI = Math.abs(i);
+        if (absI > 9999)
+        {
+            let length = 5;
+        } 
+        else
+        {
+            if (absI > 999)
+            {
+                let length = 4;
+            } 
+            else 
+            {
+                if (absI > 99)
+                {
+                    let length = 3;
+                } 
+                else 
+                {
+                    if (absI > 9)
+                    {
+                        let length = 2;
+                    } else
+                    {
+                        let length = 1;
+                    }
+                }
+            }
+        }
+
+        if (i < 0)
+        {
+            do Output.printChar(45);
+        }
+
+        let integer = String.new(length);
+        let dec = Output.findDecimalIdent(length - 1);
+        while (dec > 0)
+        {
+            let current = absI / dec;
+            do integer.appendChar(current + 48);
+            let absI = absI - (current * dec);
+            let dec = dec / 10;
+        }
+        do Output.printString(integer);
+        return;
     }
 
     /** Advances the cursor to the beginning of the next line. */
     function void println() {
+        do Output.moveCursor(cursorRow + 1, 0);
+        return;
     }
 
     /** Moves the cursor one column back. */
     function void backSpace() {
+        do Output.moveCursor(cursorRow, cursorCol - 1);
+        return;
     }
 }
