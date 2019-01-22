@@ -8,8 +8,12 @@
  */
 class Keyboard {
 
+    static int KEYBOARD;
+
     /** Initializes the keyboard. */
     function void init() {
+        let KEYBOARD = 24576;
+        return;
     } 
 
     /**
@@ -33,6 +37,7 @@ class Keyboard {
      * F1 - F12 = 141 - 152
      */
     function char keyPressed() {
+        return Memory.peek(KEYBOARD);
     }
 
     /**								
@@ -41,6 +46,18 @@ class Keyboard {
      * of the pressed key.
      */
     function char readChar() {
+        var char code;
+        while (Keyboard.keyPressed() = 0)
+        {
+
+        }
+        let code = Keyboard.keyPressed();
+        while (~(Keyboard.keyPressed() = 0))
+        {
+
+        }
+        do Output.printChar(code);
+        return code;
     }
 
     /**								
@@ -49,6 +66,32 @@ class Keyboard {
      * and returns its value. Also handles user backspaces.
      */
     function String readLine(String message) {
+        var String str;
+        var char code;
+        do Output.printString(message);
+        let str = String.new(1000);
+        while (true)
+        {
+            let code = Keyboard.readChar();
+            if (code = 128)
+            {
+                do Output.println();
+                return str;
+            }
+            else
+            {
+                if (code = 129)
+                {
+                    do str.eraseLastChar();
+                    do Output.backSpace();
+                }
+                else
+                {
+                    do str.appendChar(code);
+                }
+            }
+        }
+        return str;
     }   
 
     /**								
@@ -58,5 +101,60 @@ class Keyboard {
      * entered text is detected). Also handles user backspaces. 
      */
     function int readInt(String message) {
+        var int str;
+        var boolean neg;
+        var char code;
+        do Output.printString(message);
+        let str = 0;
+        let neg = false;
+        while (true)
+        {
+            let code = Keyboard.readChar();
+            if (code = 128)
+            {
+                do Output.println();
+                if (neg)
+                {
+                    return -str;
+                }
+                return str;
+            }
+            else
+            {
+                if (code = 129)
+                {
+                    let str = str / 10;
+                    if (neg & (str = 0))
+                    {
+                        let neg = false;
+                    }
+                    do Output.backSpace();
+                }
+                else
+                {
+                    if ((code > 47) & (code < 58))
+                    {
+                        let str = (str * 10) + (code - 48);
+                    }
+                    else
+                    {
+                        if ((str = 0) & (code = 45))
+                        {
+                            let neg = true;
+                        }
+                        else
+                        {
+                            do Output.println();
+                            if (neg)
+                            {
+                                return -str;
+                            }
+                            return str;
+                        }
+                    }
+                }
+            }
+        }
+        return str;
     }
 }
