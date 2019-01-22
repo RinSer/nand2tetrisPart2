@@ -64,10 +64,10 @@ eq
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
+call Output.backSpace 0
+pop temp 0
 push local 0
 call String.eraseLastChar 1
-pop temp 0
-call Output.backSpace 0
 pop temp 0
 goto IF_END1
 label IF_FALSE1
@@ -122,6 +122,8 @@ eq
 if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
+call Output.backSpace 0
+pop temp 0
 push local 0
 push constant 10
 call Math.divide 2
@@ -137,8 +139,6 @@ label IF_TRUE3
 push constant 0
 pop local 1
 label IF_FALSE3
-call Output.backSpace 0
-pop temp 0
 goto IF_END2
 label IF_FALSE2
 push local 2

@@ -82,8 +82,8 @@ class Keyboard {
             {
                 if (code = 129)
                 {
-                    do str.eraseLastChar();
                     do Output.backSpace();
+                    do str.eraseLastChar();
                 }
                 else
                 {
@@ -123,12 +123,12 @@ class Keyboard {
             {
                 if (code = 129)
                 {
+                    do Output.backSpace();
                     let str = str / 10;
                     if (neg & (str = 0))
                     {
                         let neg = false;
                     }
-                    do Output.backSpace();
                 }
                 else
                 {
